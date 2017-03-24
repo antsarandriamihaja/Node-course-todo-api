@@ -26,6 +26,14 @@ app.post('/todos', (req, res)=>{
      });
 });
 
+//show a user the lit of all their todos
+app.get('/todos', (req, res)=>{
+    Todo.find().then((todos)=>{
+        res.send({todos});
+    }, (e)=>{
+        res.status(400).send(e);
+    });
+});
 //url for rest API is really important. For resource cretion: url: '/todos'
 app.listen(3000, ()=>{
     console.log('Started on port 3000');
