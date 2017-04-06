@@ -6,10 +6,12 @@ const {Todo} = require('./../models/todo')
 //make sure the database is empty before test case (move on to test case once we call done)
 //for GET /todos route, there needs to be data in the Todo database
 //create seed data
-
+const {ObjectID} = require('mongodb');
 const todos = [{
+    _id: new ObjectID(),
     text: 'First test todo'
 }, {
+    _id: new ObjectID(),
     text: 'Second test todo'
 }];
 
@@ -86,3 +88,32 @@ describe('GET /todos', ()=>{
         })
     });
 
+describe('GET /todos/:id', () => {
+    it('Should return todo doc', (done) => {
+        request(app)
+        .get(`/todos/${todos[0]._id.toHexString()}`)
+        .expect(200)
+        .expect((res)=>{
+            expect(res.body.todo.text).toBe(todos[0].text);
+        })
+        .end(done);
+    });
+
+    it('Should return a 404 if todo not found', (done) =>{
+        var id = new ObjectID();
+        request(app)
+        .get(`/todos/${id.toHexString()}`)
+        .expect(404)
+        .expect((res) => {
+            expect(res.body.todo).toBe();
+        })
+        .end(done);
+    });
+
+    it('Should return a 404 for invalid _id', (done) => {
+        request(app)
+        .get('/todos/1234')
+        .expect(404)
+        .end(done);
+    })
+});
