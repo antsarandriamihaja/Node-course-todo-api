@@ -7,6 +7,7 @@ var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
 var app = express();
+const port = process.env.PORT || 3000;
 //Configure middleware
 
 app.use(bodyParser.json());//returns a function which is the middleware we need to give to express
@@ -52,8 +53,8 @@ app.get('/todos/:id', (req, res) =>{
     })
 })
 //url for rest API is really important. For resource cretion: url: '/todos'
-app.listen(3000, ()=>{
-    console.log('Started on port 3000');
+app.listen(port, ()=>{
+    console.log(`Started on port ${port}`);
 });
 
 module.exports = {app};
